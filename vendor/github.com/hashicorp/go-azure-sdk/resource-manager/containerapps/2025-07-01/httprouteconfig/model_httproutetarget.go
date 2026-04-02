@@ -7,5 +7,4 @@ type HTTPRouteTarget struct {
 	ContainerApp string  `json:"containerApp"`
 	Label        *string `json:"label,omitempty"`
 	Revision     *string `json:"revision,omitempty"`
-	Weight       *int64  `json:"weight,omitempty"`
 }

@@ -118,7 +118,6 @@ resource "azurerm_container_app_environment_http_route_config" "test" {
   rules {
     targets {
       container_app = azurerm_container_app.test.name
-      weight        = 100
     }
   }
 }
@@ -136,7 +135,6 @@ resource "azurerm_container_app_environment_http_route_config" "import" {
   rules {
     targets {
       container_app = azurerm_container_app.test.name
-      weight        = 100
     }
   }
 }
@@ -171,7 +169,6 @@ resource "azurerm_container_app_environment_http_route_config" "test" {
 
     targets {
       container_app = azurerm_container_app.test.name
-      weight        = 80
     }
   }
 
@@ -186,7 +183,6 @@ resource "azurerm_container_app_environment_http_route_config" "test" {
 
     targets {
       container_app = azurerm_container_app.test.name
-      weight        = 100
     }
   }
 }

@@ -59,7 +59,6 @@ type HttpRouteTargetModel struct {
 	ContainerApp string `tfschema:"container_app"`
 	Label        string `tfschema:"label"`
 	Revision     string `tfschema:"revision"`
-	Weight       int64  `tfschema:"weight"`
 }
 
 var _ sdk.ResourceWithUpdate = ContainerAppEnvironmentHttpRouteConfigResource{}
@@ -226,13 +225,6 @@ func (r ContainerAppEnvironmentHttpRouteConfigResource) Arguments() map[string]*
 									Optional:     true,
 									ValidateFunc: validation.StringIsNotEmpty,
 									Description:  "Revision to route requests to.",
-								},
-
-								"weight": {
-									Type:         pluginsdk.TypeInt,
-									Optional:     true,
-									ValidateFunc: validation.IntBetween(0, 100),
-									Description:  "Weighted routing. Must be between `0` and `100`.",
 								},
 							},
 						},
@@ -559,9 +551,6 @@ func expandHttpRouteTargets(input []HttpRouteTargetModel) *[]httprouteconfig.HTT
 		if v.Revision != "" {
 			target.Revision = pointer.To(v.Revision)
 		}
-		if v.Weight != 0 {
-			target.Weight = pointer.To(v.Weight)
-		}
 		result = append(result, target)
 	}
 
@@ -579,7 +568,6 @@ func flattenHttpRouteTargets(input *[]httprouteconfig.HTTPRouteTarget) []HttpRou
 			ContainerApp: v.ContainerApp,
 			Label:        pointer.From(v.Label),
 			Revision:     pointer.From(v.Revision),
-			Weight:       pointer.From(v.Weight),
 		}
 		result = append(result, target)
 	}

@@ -6,7 +6,7 @@ package httprouteconfig
 type HTTPRouteConfigProperties struct {
 	CustomDomains      *[]CustomDomain                `json:"customDomains,omitempty"`
 	Fqdn               *string                        `json:"fqdn,omitempty"`
-	ProvisioningErrors *[]HTTPRouteProvisioningErrors  `json:"provisioningErrors,omitempty"`
-	ProvisioningState  *HTTPRouteProvisioningState     `json:"provisioningState,omitempty"`
-	Rules              *[]HTTPRouteRule                `json:"rules,omitempty"`
+	ProvisioningErrors *[]HTTPRouteProvisioningErrors `json:"provisioningErrors,omitempty"`
+	ProvisioningState  *HTTPRouteProvisioningState    `json:"provisioningState,omitempty"`
+	Rules              *[]HTTPRouteRule               `json:"rules,omitempty"`
 }

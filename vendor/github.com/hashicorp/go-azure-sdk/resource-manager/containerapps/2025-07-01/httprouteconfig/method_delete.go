@@ -2,9 +2,12 @@ package httprouteconfig
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/hashicorp/go-azure-sdk/sdk/client"
+	"github.com/hashicorp/go-azure-sdk/sdk/client/pollers"
+	"github.com/hashicorp/go-azure-sdk/sdk/client/resourcemanager"
 	"github.com/hashicorp/go-azure-sdk/sdk/odata"
 )
 
@@ -12,6 +15,7 @@ import (
 // Licensed under the MIT License. See NOTICE.txt in the project root for license information.
 
 type DeleteOperationResponse struct {
+	Poller       pollers.Poller
 	HttpResponse *http.Response
 	OData        *odata.OData
 }
@@ -21,8 +25,8 @@ func (c HTTPRouteConfigClient) Delete(ctx context.Context, id HTTPRouteConfigId)
 	opts := client.RequestOptions{
 		ContentType: "application/json; charset=utf-8",
 		ExpectedStatusCodes: []int{
+			http.StatusAccepted,
 			http.StatusNoContent,
-			http.StatusOK,
 		},
 		HttpMethod: http.MethodDelete,
 		Path:       id.ID(),
@@ -43,5 +47,24 @@ func (c HTTPRouteConfigClient) Delete(ctx context.Context, id HTTPRouteConfigId)
 		return
 	}
 
+	result.Poller, err = resourcemanager.PollerFromResponse(resp, c.Client)
+	if err != nil {
+		return
+	}
+
 	return
+}
+
+// DeleteThenPoll performs Delete then polls until it's completed
+func (c HTTPRouteConfigClient) DeleteThenPoll(ctx context.Context, id HTTPRouteConfigId) error {
+	result, err := c.Delete(ctx, id)
+	if err != nil {
+		return fmt.Errorf("performing Delete: %+v", err)
+	}
+
+	if err := result.Poller.PollUntilDone(ctx); err != nil {
+		return fmt.Errorf("polling after Delete: %+v", err)
+	}
+
+	return nil
 }

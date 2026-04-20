@@ -13,16 +13,34 @@ Manages a Container App Environment HTTP Route Config.
 ## Example Usage
 
 ```hcl
+resource "azurerm_container_app_environment" "example" {
+  name                = "example-environment"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+}
+
 resource "azurerm_container_app_environment_http_route_config" "example" {
-  name = "example"
+  name                         = "exampleroute"
+  container_app_environment_id = azurerm_container_app_environment.example.id
 
   rules {
+    description = "example rule"
 
     targets {
-      container_app = "TODO"      
-    }    
+      container_app = "mycontainerapp"
+    }
+
+    routes {
+      match {
+        prefix         = "/api"
+        case_sensitive = true
+      }
+
+      action {
+        prefix_rewrite = "/v1"
+      }
+    }
   }
-  container_app_environment_id = "TODO"
 }
 ```
 
@@ -30,7 +48,7 @@ resource "azurerm_container_app_environment_http_route_config" "example" {
 
 The following arguments are supported:
 
-* `container_app_environment_id` - (Required) The ID of the TODO. Changing this forces a new resource to be created.
+* `container_app_environment_id` - (Required) The ID of the Container App Environment. Changing this forces a new resource to be created.
 
 * `name` - (Required) The name which should be used for this Container App Environment HTTP Route Config. Changing this forces a new resource to be created.
 
@@ -44,29 +62,29 @@ The following arguments are supported:
 
 A `action` block supports the following:
 
-* `prefix_rewrite` - (Optional) TODO.
+* `prefix_rewrite` - (Optional) The prefix to rewrite the path with. Defaults to no rewrite.
 
 ---
 
 A `custom_domains` block supports the following:
 
-* `name` - (Required) The name which should be used for this TODO.
+* `name` - (Required) The hostname.
 
-* `binding_type` - (Optional) TODO.
+* `binding_type` - (Optional) The Custom Domain binding type. Possible values are `Auto`, `Disabled` and `SniEnabled`.
 
-* `certificate_id` - (Optional) The ID of the TODO.
+* `certificate_id` - (Optional) The Resource ID of the Certificate to be bound to this hostname. Must exist in the Managed Environment.
 
 ---
 
 A `match` block supports the following:
 
-* `case_sensitive` - (Optional) TODO. Defaults to `true`.
+* `case_sensitive` - (Optional) Whether path matching is case sensitive. Defaults to `true`.
 
-* `path` - (Optional) TODO.
+* `path` - (Optional) The exact path to match on.
 
-* `path_separated_prefix` - (Optional) TODO.
+* `path_separated_prefix` - (Optional) The path separated prefix to match on. Matches on all prefixes, not exact.
 
-* `prefix` - (Optional) TODO.
+* `prefix` - (Optional) The prefix to match on. Matches on all prefixes, not exact.
 
 ---
 
@@ -82,7 +100,7 @@ A `rules` block supports the following:
 
 * `targets` - (Required) One or more `targets` blocks as defined below.
 
-* `description` - (Optional) TODO.
+* `description` - (Optional) The description of the rule.
 
 * `routes` - (Optional) One or more `routes` blocks as defined above.
 
@@ -90,11 +108,11 @@ A `rules` block supports the following:
 
 A `targets` block supports the following:
 
-* `container_app` - (Required) TODO.
+* `container_app` - (Required) The Container App name to route requests to.
 
-* `label` - (Optional) TODO.
+* `label` - (Optional) The label to route requests to.
 
-* `revision` - (Optional) TODO.
+* `revision` - (Optional) The revision to route requests to.
 
 ## Attributes Reference
 
@@ -102,7 +120,7 @@ In addition to the Arguments listed above - the following Attributes are exporte
 
 * `id` - The ID of the Container App Environment HTTP Route Config.
 
-* `fqdn` - TODO.
+* `fqdn` - The FQDN of the HTTP Route Config.
 
 ## Timeouts
 

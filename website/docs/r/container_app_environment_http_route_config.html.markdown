@@ -138,3 +138,9 @@ Container App Environment HTTP Route Configs can be imported using the `resource
 ```shell
 terraform import azurerm_container_app_environment_http_route_config.example /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resGroup1/providers/Microsoft.App/managedEnvironments/myEnvironment/httpRouteConfigs/myhttproute
 ```
+
+## API Providers
+<!-- This section is generated, changes will be overwritten -->
+This resource uses the following Azure API Providers:
+
+* `Microsoft.App` - 2025-07-01
